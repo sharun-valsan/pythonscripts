@@ -10,7 +10,7 @@ def download_data_file(url, output_file):
         with open(output_file, 'wb') as f:
             f.write(response.content)
     else:
-        print("Failed to download the data file from the provided URL.")
+        print("Failed to download the Mutual Fund data from AMFI portal.")
 
 def update_docs_data(data_file, docs_file):
     # Step 1: Read data from the data file
@@ -18,14 +18,14 @@ def update_docs_data(data_file, docs_file):
         reader = csv.reader(data_file, delimiter=';')
         data = list(reader)
 
-    # Step 2: Read strings from the 8th row of the docs file and update associated 9th row
+    # Step 2: Read strings from the 8th row of the MF worksheet, compare it and update associated 9th row with current NAV data.
     workbook = load_workbook(filename=docs_file)
     sheet = workbook.active
     for row_number in range(1, sheet.max_row + 1):
         eighth_row_value = sheet.cell(row=row_number, column=8).value
         for row in data:
             if eighth_row_value in row:
-                ninth_row_value = row[4]  # Assuming index starts from 0
+                ninth_row_value = row[4] 
                 sheet.cell(row=row_number, column=9).value = ninth_row_value
                 break  # Assuming only one match is expected, exit loop after update
     
